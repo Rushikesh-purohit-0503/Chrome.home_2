@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Rushikesh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+        }
+
+        .greeting {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.5);
+        }
+
+        .name {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1s forwards;
+            background: linear-gradient(45deg, #ffffff, #ffdd00, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 80px rgba(255, 221, 0, 0.6));
+        }
+
+        .date-time {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+            color: #ffffff;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.7), 0 0 50px rgba(255, 255, 255, 0.4);
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .search-container {
+            margin-top: 3rem;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 2s forwards;
+        }
+
+        .search-box:focus-within {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .search-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            opacity: 0.7;
+        }
+
+        #search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .quick-links {
+            margin-top: 2rem;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 2.5s forwards;
+        }
+
+        .quick-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .quick-link-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover .quick-link-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .quick-link-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .greeting {
+                font-size: 1.5rem;
+            }
+            .name {
+                font-size: 3rem;
+            }
+            .date-time {
+                font-size: 1rem;
+            }
+            .time {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="content">
+        <div class="greeting" id="greeting"></div>
+        <div class="name">Rushikesh</div>
+        <div class="date-time">
+            <div id="date"></div>
+            <div class="time" id="time"></div>
+        </div>
+        
+        <div class="search-container">
+            <form class="search-box" action="https://www.google.com/search" method="GET" target="_blank">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="search-input" name="q" placeholder="Search Google or type a URL" autocomplete="off">
+            </form>
+            
+            <div class="quick-links">
+                <a href="https://mail.google.com" target="_blank" class="quick-link">
+                    <div class="quick-link-icon">📧</div>
+                    <div class="quick-link-label">Gmail</div>
+                </a>
+                <a href="https://www.youtube.com" target="_blank" class="quick-link">
+                    <div class="quick-link-icon">▶️</div>
+                    <div class="quick-link-label">YouTube</div>
+                </a>
+                <a href="https://drive.google.com" target="_blank" class="quick-link">
+                    <div class="quick-link-icon">📁</div>
+                    <div class="quick-link-label">Drive</div>
+                </a>
+                <a href="https://maps.google.com" target="_blank" class="quick-link">
+                    <div class="quick-link-icon">🗺️</div>
+                    <div class="quick-link-label">Maps</div>
+                </a>
+                <a href="https://calendar.google.com" target="_blank" class="quick-link">
+                    <div class="quick-link-icon">📅</div>
+                    <div class="quick-link-label">Calendar</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Time and greeting logic
+        function updateDateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            
+            // Determine greeting
+            let greeting = '';
+            if (hours >= 5 && hours < 12) {
+                greeting = 'Good Morning';
+            } else if (hours >= 12 && hours < 17) {
+                greeting = 'Good Afternoon';
+            } else if (hours >= 17 && hours < 21) {
+                greeting = 'Good Evening';
+            } else {
+                greeting = 'Good Night';
+            }
+            
+            document.getElementById('greeting').textContent = greeting;
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('en-US', options);
+            document.getElementById('date').textContent = dateStr;
+            
+            // Format time
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('time').textContent = timeStr;
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // Three.js Scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Create geometric shapes
+        const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0xff00ff, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+        const torus = new THREE.Mesh(geometry, material);
+        scene.add(torus);
+        
+        // Add more shapes
+        const octahedronGeometry = new THREE.OctahedronGeometry(5);
+        const octahedronMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x00ff00, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.2
+        });
+        const octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
+        octahedron.position.set(-15, 0, -10);
+        scene.add(octahedron);
+        
+        camera.position.z = 30;
+        
+        // Mouse movement
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            torus.rotation.x += 0.01;
+            torus.rotation.y += 0.005;
+            torus.rotation.z += 0.01;
+            
+            octahedron.rotation.x += 0.005;
+            octahedron.rotation.y += 0.01;
+            
+            particlesMesh.rotation.y += 0.0005;
+            
+            // Camera follows mouse
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
